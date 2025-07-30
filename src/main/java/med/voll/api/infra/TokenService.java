@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 
 @Service
 public class TokenService {
@@ -20,35 +18,38 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generarToken(Usuario usuario){
+    public String generarToken(Usuario usuario) {
         try {
-            var algorithm = Algorithm.HMAC256(secret);
+            var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("API Voll.med")
+                    .withIssuer("API Foro")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(fechaExpiracion())
-                    .sign(algorithm);
+                    .sign(algoritmo);
         } catch (JWTCreationException exception){
-            throw new RuntimeException("error al generar el toke JWT", exception);
+            throw new RuntimeException("error al generar el token JWT", exception);
         }
     }
 
     private Instant fechaExpiracion() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
     }
 
-    public String getSubject(String tokenJWT){
-
+    public String getSubject(String tokenJWT) {
+        if (tokenJWT == null || tokenJWT.trim().isEmpty()) {
+            throw new RuntimeException("Token JWT vacío o nulo");
+        }
         try {
-            var algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("API Voll.med")
+            System.out.println("verificando token");
+            var algoritmo = Algorithm.HMAC256(secret);
+            return JWT.require(algoritmo)
+                    .withIssuer("API Foro")
                     .build()
                     .verify(tokenJWT)
                     .getSubject();
-
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Token JWT invalido o expirado");
+            System.out.println("verificacion fallida");
+            throw new RuntimeException("Token JWT invalido o expirado!");
         }
     }
 }

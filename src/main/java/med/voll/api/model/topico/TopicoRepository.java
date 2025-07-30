@@ -9,6 +9,6 @@ import java.time.LocalDateTime;
 
 
 public interface TopicoRepository extends JpaRepository<Topico, Long> {
-    Page<Topico> findByActivoTrue(Pageable paginas);
+    Page<Topico> findByEstadoTrue(Pageable paginas);
 
 }

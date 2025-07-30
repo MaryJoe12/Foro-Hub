@@ -18,33 +18,29 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private UsuarioRepository repository;
-
-    @Autowired
     private TokenService tokenService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //bearer token con la request
-        var tokenJWT = recuperartoken(request);
-        if (tokenJWT != null) {
-            //logear el nuevo usuario con token
-            var subject = tokenService.getSubject(tokenJWT);
-            var usuario= repository.findByLogin(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        // Obtener el token del header
+        var authHeader = request.getHeader("Authorization");
+        if (authHeader != null) {
+            var token = authHeader.replace("Bearer ", "");
+            var nombreUsuario = tokenService.getSubject(token); // extract username
+            System.out.println("nombre usuario"+ nombreUsuario);
+            if (nombreUsuario != null) {
+                // Token valido
+                var usuario = usuarioRepository.findByLogin(nombreUsuario);
+                System.out.println("usuario encontrado");
+                if (usuario != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(usuario, null,
+                        usuario.getAuthorities()); // Forzamos un inicio de sesion
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
         }
-
-        filterChain.doFilter(request,response);
-    }
-
-    private String recuperartoken(HttpServletRequest request) {
-        var authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null){
-            return authorizationHeader.replace("Bearer ", "").trim();
-        }
-        return null;
-
+        filterChain.doFilter(request, response);
     }
 }

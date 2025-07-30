@@ -37,9 +37,9 @@ public class TopicoController {
 
     @GetMapping
     //cuantos datos por pagina el size
-    public ResponseEntity<Page<TopicoDTO>> listar(@PageableDefault(size=10, sort= {"titulo"} ) Pageable paginas){
+    public ResponseEntity<Page<TopicoDTO>> listar(@PageableDefault(size=10, sort= "titulo" ) Pageable paginas){
 
-        return ResponseEntity.ok(repository.findByActivoTrue(paginas)
+        return ResponseEntity.ok(repository.findByEstadoTrue(paginas)
                 .map(TopicoDTO::new));
     }
 

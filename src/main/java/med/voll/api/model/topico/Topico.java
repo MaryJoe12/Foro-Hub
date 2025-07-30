@@ -24,7 +24,7 @@ public class Topico {
     private String mensaje;
     private String autor;
     private String curso;
-    private LocalDateTime fechaCreacion;
+    private LocalDateTime fecha_creacion;
 
 
     public Topico(DatosTopico datos) {
@@ -34,7 +34,7 @@ public class Topico {
         this.mensaje = datos.mensaje();
         this.autor = datos.autor();
         this.curso = datos.curso();
-        this.fechaCreacion = LocalDateTime.now();
+        this.fecha_creacion = LocalDateTime.now();
     }
 
     public void actualizar(@Valid ActualizarTopicoDTO datos) {

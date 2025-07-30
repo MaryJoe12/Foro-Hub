@@ -6,12 +6,12 @@ public record TopicoDTO(
         Long id,
         String titulo,
         String mensaje,
-        LocalDateTime fechaCreacion,
+        LocalDateTime fecha_creacion,
         boolean estado,
         String autor,
         String curso
 ) {
     public TopicoDTO(Topico datos) {
-        this(datos.getId(), datos.getTitulo(), datos.getMensaje(), datos.getFechaCreacion(), datos.getEstado(), datos.getAutor(), datos.getCurso());
+        this(datos.getId(), datos.getTitulo(), datos.getMensaje(), datos.getFecha_creacion(), datos.getEstado(), datos.getAutor(), datos.getCurso());
     }
 }
