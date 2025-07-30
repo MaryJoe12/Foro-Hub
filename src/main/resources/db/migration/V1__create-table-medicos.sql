@@ -1,17 +1,22 @@
 create table medicos(
 
     id bigint not null auto_increment,
-    nombre varchar(100) not null,
-    email varchar(100) not null unique,
-    documento varchar(12) not null unique,
-    especialidad varchar(100) not null,
-    calle varchar(100) not null,
-    barrio varchar(100) not null,
-    codigo_postal varchar(12) not null,
-    complemento varchar(100),
-    numero varchar(20),
-    estado char(100) not null,
-    ciudad varchar(100) not null,
+    estado tinyint not null,
+    titulo varchar(100) not null unique,
+    mensaje varchar(200) not null unique,
+    autor varchar(100) not null,
+    curso varchar(100) not null,
+    fechaCreacion datetime not null,
+
+    primary key(id)
+
+);
+
+create table usuarios(
+
+    id bigint not null auto_increment,
+    login varchar(100) not null,
+    contrasena varchar(255) not null,
 
     primary key(id)
 
